@@ -58,26 +58,34 @@
     return li;
   }
 
-  async function addItem(name, sourceForm) {
-    name = name.trim();
-    if (!name) { TM.toast('Nama item wajib diisi.'); return false; }
-    const fd = new FormData(sourceForm);
-    fd.set('item_name', name);
-    fd.set('ajax', '1');
-    try {
-      const data = await TM.post(addForm.action, fd);
-      if (!data.ok) { TM.toast(data.message); return false; }
-      const li = createItem(data.id, name, addForm.action);
-      const firstDone = list.querySelector('.check-item.done');   // item baru di antara yang belum & sudah selesai
-      list.insertBefore(li, firstDone);
-      updateProgress();
-      return true;
-    } catch (err) {
-      TM.toast('Gagal terhubung ke server.');
+ async function addItem(name, sourceForm) {
+  name = name.trim();
+  if (!name) { TM.toast('Nama item wajib diisi.'); return false; }
+  const fd = new FormData(sourceForm);
+  fd.set('item_name', name);
+  fd.set('ajax', '1');
+  console.log('URL CHECKLIST:', addForm.getAttribute('action'));
+  try {
+    const data = await TM.post(addForm.getAttribute('action'), fd);
+    if (!data.ok) {
+      TM.toast(data.message);
       return false;
     }
+    const li = createItem(
+      data.id,
+      name,
+      addForm.getAttribute('action')
+    );
+    const firstDone = list.querySelector('.check-item.done');
+    list.insertBefore(li, firstDone);
+    updateProgress();
+    return true;
+  } catch (err) {
+    console.error(err);
+    TM.toast('Gagal terhubung ke server.');
+    return false;
   }
-
+}
   // Tambah lewat input
   addForm.addEventListener('submit', async function (e) {
     e.preventDefault();
@@ -110,7 +118,7 @@
       setDone(li, willCheck);               // update tampilan dulu (optimistic)
       updateProgress();
       try {
-        const data = await TM.post(form.action, fd);
+        const data = await TM.post(form.getAttribute('action'), fd);
         if (!data.ok) throw new Error(data.message);
       } catch (err) {
         setDone(li, !willCheck);            // batalkan jika gagal
@@ -125,7 +133,7 @@
       fd.set('ajax', '1');
       li.style.opacity = '.5';
       try {
-        const data = await TM.post(form.action, fd);
+        const data = await TM.post(form.getAttribute('action'), fd);
         if (!data.ok) throw new Error(data.message);
         li.remove();
         updateProgress();
