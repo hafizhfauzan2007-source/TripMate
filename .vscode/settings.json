@@ -1,0 +1,20 @@
+{
+  // Simpan sebagai UTF-8 tanpa BOM (BOM bisa menyebabkan "headers already sent")
+  "files.encoding": "utf8",
+  "files.eol": "\n",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+
+  "editor.tabSize": 2,
+  "[php]": {
+    "editor.tabSize": 4,
+    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+  },
+  "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[css]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+
+  // Aktifkan jika PHP sudah ada di PATH atau isi lokasi php.exe milik XAMPP/Laragon:
+  // "php.validate.executablePath": "C:/xampp/php/php.exe",
+
+  "emmet.includeLanguages": { "php": "html" }
+}
